@@ -3,7 +3,12 @@ from data.locaties import locaties
 from data.commissies import commissies
 from data.hoedanigheden import hoedanigheden
 from data.organisaties import organisaties
+from data.gedelegeerden import gedelegeerden
 from indexer import Indexer
+from mysql_handler import Db
+
+config = {"host": "localhost", "database": "conversie", "user": "root", "password": "bonzo"}
+db = Db(config)
 
 def index_peronen():
     for pers in personen:
@@ -19,6 +24,7 @@ def index_peronen():
         element = add_delegates(element)
         element["envoyes"] = pers["envoyes"]
         element = add_envoys(element)
+        element = add_years(element)
         indexer.add_to_index(element)
 
 def index_organisaties():
@@ -30,6 +36,7 @@ def index_organisaties():
         element["labels"] = organisatie["labels"]
         element = add_labels(element)
         element["links"] = organisatie["links"]
+        element = add_years(element)
         indexer.add_to_index(element)
 
 def index_commissies():
@@ -42,6 +49,7 @@ def index_commissies():
             element["comment"] = commissie["comment"]
         element["labels"] = commissie["labels"]
         element = add_labels(element)
+        element = add_years(element)
         indexer.add_to_index(element)
 
 def index_hoedanigheden():
@@ -52,7 +60,14 @@ def index_hoedanigheden():
         element["category"] = 'Hoedanigheid'
         element["labels"] = hoedanigheid["labels"]
         element = add_labels(element)
+        element = add_years(element)
         indexer.add_to_index(element)
+
+def index_gedeputeerden():
+    for gedelegeerde in gedelegeerden:
+        if isinstance(gedelegeerde['RAA_nr'], str):
+            gedelegeerde['RAA_nr'] = 0
+        indexer.add_to_index(gedelegeerde)
 
 def index_locaties():
     for locatie in locaties:
@@ -75,6 +90,7 @@ def index_locaties():
         except:
             print("No labels")
         element = get_lat_lon(element)
+        element = add_years(element)
         indexer.add_to_index(element)
 
 def get_lat_lon(el):
@@ -86,6 +102,13 @@ def get_lat_lon(el):
         el["geo_data"].update({'lat': latlon[0].strip(), 'lon': latlon[1].strip()})
     except Exception as error:
         print(error)
+    return el
+
+def add_years(el):
+    years = db.get_years(el["id"])
+    if years:
+        el["first_year"] = years["first_year"]
+        el["last_year"] = years["last_year"]
     return el
 
 def add_raa(el):
@@ -156,4 +179,5 @@ index_hoedanigheden()
 print("Roles indexed...")
 index_organisaties()
 print("Organisations indexed...")
+index_gedeputeerden()
 print("All done!")
