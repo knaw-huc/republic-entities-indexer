@@ -118,7 +118,8 @@ The index is created with the name * entities * .
 
 It has the following mapping:
 
-`{
+```json
+{
   "entities" : {
     "mappings" : {
       "properties" : {
@@ -381,7 +382,7 @@ It has the following mapping:
     }
   }
 }
-`
+```
 
 ## Creating the index
 To create an entity index follow this procedure:
