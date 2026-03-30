@@ -23,7 +23,7 @@ The following entities can be distinguished:
 The JSON files have the following structures:
 
 *Commissions*
-`id: string,`
+`id: string,`<br>
 `name: string,`
 `category: string,`
 `labels: list[string],`
