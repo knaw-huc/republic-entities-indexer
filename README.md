@@ -118,7 +118,7 @@ The index is created with the name * entities * .
 
 It has the following mapping:
 
-`{\n
+`{
   "entities" : {
     "mappings" : {
       "properties" : {
