@@ -114,7 +114,7 @@ After the index is created it's uploaded to the server where the Goetgevonden ap
 For creating a local index a Docker instance of ES is started with the command
 `docker run --name elastic_index  -p 9200:9200 -p 9300:9300  --rm  -v /<LOCAL PATH>/index:/usr/share/elasticsearch/data -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.10.1`
 
-The index is created with the name * entities * . 
+The index is created with the name *entities* . 
 
 It has the following mapping:
 
